@@ -1,0 +1,46 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common'
+import { FornecedorService } from './fornecedor.service'
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto'
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto'
+
+@Controller('fornecedores')
+export class FornecedorController {
+  constructor(private readonly fornecedorService: FornecedorService) {}
+
+  @Post()
+  create(@Body() dto: CreateFornecedorDto) {
+    return this.fornecedorService.create(dto)
+  }
+
+  @Get()
+  findAll() {
+    return this.fornecedorService.findAll()
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.fornecedorService.findOne(id)
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateFornecedorDto,
+  ) {
+    return this.fornecedorService.update(id, dto)
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.fornecedorService.remove(id)
+  }
+}
