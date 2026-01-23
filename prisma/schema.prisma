@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  //output   = "../generated/prisma"
 }
 
 datasource db {
@@ -8,187 +7,158 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum PrioridadeFornecedor {
-  PRIMARIA
-  SECUNDARIA
-  TERCIARIA
-  OUTRA
-}
-
 model fornecedor {
-  idFornecedor       Int    @id @default(autoincrement())
-  cnpjcpf            String @unique
-  nome               String
-  endereco           String
-  telefone           String
-  tipoFornecimento   String
-  prazoEntrega       Int
-  email              String @unique
-
+  idFornecedor            Int                     @id @default(autoincrement())
+  cnpjcpf                 String                  @unique
+  nome                    String
+  endereco                String
+  telefone                String
+  tipoFornecimento        String
+  prazoEntrega            Int
+  email                   String                  @unique
   produtoLojaFornecedores produtoLojaFornecedor[]
 }
 
 model produto {
-  idProduto    Int    @id @default(autoincrement())
-  descricao    String
-  preco        Float
-  dataEntrada  DateTime @default(now())
-  dataSaida    DateTime?
-  foto         String?
-  setorPreparo String
-  disponivel   Boolean @default(true)
-
+  idProduto               Int                     @id @default(autoincrement())
+  descricao               String
+  preco                   Float
+  dataEntrada             DateTime                @default(now())
+  dataSaida               DateTime?
+  foto                    String?
+  setorPreparo            String
+  disponivel              Boolean                 @default(true)
+  pedidoProdutos          pedidoProduto[]
   produtoLojaFornecedores produtoLojaFornecedor[]
-  pedidoProdutos pedidoProduto[]
-
-  alimento produtoalimento?
-  bebida   produtobebida?
-  cafe     produtocafe?
+  alimento                produtoalimento?
+  bebida                  produtobebida?
+  cafe                    produtocafe?
 }
 
 model produtoalimento {
-  idProdAli         Int      @id 
-  peso              Float
-  ingredientes      String
-  dataValidade      DateTime
-  classAlimentar    String
-  quantPorEmba      Int
-
-  produto   produto @relation(fields: [idProdAli], references: [idProduto])
+  idProdAli      Int      @id
+  peso           Float
+  ingredientes   String
+  dataValidade   DateTime
+  classAlimentar String
+  quantPorEmba   Int
+  produto        produto  @relation(fields: [idProdAli], references: [idProduto])
 }
 
 model produtobebida {
-  idProdBeb        Int      @id 
-  volume           Float
-  calorias         Int
-  GelOuQuente      String
-  acucar           Boolean
-  lactose          Boolean
-  ingredientes     String
-
-  produto   produto @relation(fields: [idProdBeb], references: [idProduto])
+  idProdBeb    Int     @id
+  volume       Float
+  calorias     Int
+  GelOuQuente  String
+  acucar       Boolean
+  lactose      Boolean
+  ingredientes String
+  produto      produto @relation(fields: [idProdBeb], references: [idProduto])
 }
 
 model produtocafe {
-  idProdCafe    Int      @id 
-  tipoMoagem    String
-  tipoTorra     String
-  acidez        String
-  origem        String
-  tamEmbalagem  Int
-  tipoGrao      String
-
-  produto   produto @relation(fields: [idProdCafe], references: [idProduto])
+  idProdCafe   Int     @id
+  tipoMoagem   String
+  tipoTorra    String
+  acidez       String
+  origem       String
+  tamEmbalagem Int
+  tipoGrao     String
+  produto      produto @relation(fields: [idProdCafe], references: [idProduto])
 }
 
-
 model loja {
-  idLoja       Int    @id @default(autoincrement())
-  cnpj         String @unique
-  telefone     String
-  endereco     String
-
+  idLoja                  Int                     @id @default(autoincrement())
+  cnpj                    String                  @unique
+  telefone                String
+  endereco                String
+  cargos                  cargo[]
+  funcionarios            funcionario[]
+  pedidos                 pedido[]
   produtoLojaFornecedores produtoLojaFornecedor[]
-  funcionarios funcionario[]
-  cargos cargo[]
-  pedidos pedido[]
 }
 
 model produtoLojaFornecedor {
   produtoId    Int
   lojaId       Int
   fornecedorId Int
-
   prioridade   PrioridadeFornecedor
-
-  produto    produto    @relation(fields: [produtoId], references: [idProduto])
-  loja       loja       @relation(fields: [lojaId], references: [idLoja])
-  fornecedor fornecedor @relation(fields: [fornecedorId], references: [idFornecedor])
+  fornecedor   fornecedor           @relation(fields: [fornecedorId], references: [idFornecedor])
+  loja         loja                 @relation(fields: [lojaId], references: [idLoja])
+  produto      produto              @relation(fields: [produtoId], references: [idProduto])
 
   @@id([produtoId, lojaId, fornecedorId])
 }
 
 model cargo {
-  idCargo        Int    @id @default(autoincrement())
-  nome           String @unique
-  salaBase       Decimal @db.Decimal(10, 2)
-
-  lojaId Int
-  loja   loja @relation(fields: [lojaId], references: [idLoja])
-
+  idCargo      Int           @id @default(autoincrement())
+  nome         String        @unique
+  salaBase     Decimal       @db.Decimal(10, 2)
+  lojaId       Int
+  loja         loja          @relation(fields: [lojaId], references: [idLoja])
   funcionarios funcionario[]
 
   @@unique([nome, lojaId])
 }
 
 model formaPagamento {
-  idFormaPag             Int    @id @default(autoincrement())
-  nomeFormaPagamento     String @unique
-
-  pedidos pedido[]
+  idFormaPag         Int      @id @default(autoincrement())
+  nomeFormaPagamento String   @unique
+  pedidos            pedido[]
 }
 
 model pessoa {
-  idPessoa        Int      @id @default(autoincrement())
-  nome            String
-  username        String   @unique
-  password        String
-  email           String   @unique
-  cpf             String   @unique
-  telefone        String
-  endereco        String
-  estcivil        String
-
-  cliente         cliente?
-  funcionario     funcionario?
+  idPessoa    Int          @id @default(autoincrement())
+  nome        String
+  username    String       @unique
+  password    String
+  email       String       @unique
+  cpf         String       @unique
+  telefone    String
+  endereco    String
+  estcivil    String
+  cliente     cliente?
+  funcionario funcionario?
 }
 
 model cliente {
-  idCliente        Int    @id
-  fidelidade        Boolean @default(false)
-  fidelidadePontos  Int     @default(0)
-  preferAlimentar   String?
-
-  pedidos           pedido[]
-
-  pessoa    pessoa @relation(fields: [idCliente], references: [idPessoa], onDelete: Cascade)
+  idCliente        Int      @id
+  fidelidade       Boolean  @default(false)
+  fidelidadePontos Int      @default(0)
+  preferAlimentar  String?
+  pessoa           pessoa   @relation(fields: [idCliente], references: [idPessoa], onDelete: Cascade)
+  pedidos          pedido[]
 }
 
 model funcionario {
-  idFuncionario     Int    @id
-  percentComissao  Decimal @db.Decimal(5, 2)
-  dataAdmissao     DateTime @default(now())
-  cargoId   Int
-  lojaId    Int
-
-  cargo     cargo @relation(fields: [cargoId], references: [idCargo])
-  loja      loja  @relation(fields: [lojaId], references: [idLoja])
-
-  pedidos pedido[]
-
-  pessoa    pessoa @relation(fields: [idFuncionario], references: [idPessoa], onDelete: Cascade)
+  idFuncionario   Int      @id
+  percentComissao Decimal  @db.Decimal(5, 2)
+  dataAdmissao    DateTime @default(now())
+  cargoId         Int
+  lojaId          Int
+  cargo           cargo    @relation(fields: [cargoId], references: [idCargo])
+  pessoa          pessoa   @relation(fields: [idFuncionario], references: [idPessoa], onDelete: Cascade)
+  loja            loja     @relation(fields: [lojaId], references: [idLoja])
+  pedidos         pedido[]
 
   @@unique([cargoId, lojaId, idFuncionario])
 }
 
 model pedido {
-  idPedido       Int      @id @default(autoincrement())
-  dataVenda      DateTime @default(now())
-  valorBruto     Decimal  @db.Decimal(10, 2)
-  desconto       Decimal  @db.Decimal(10, 2)
+  idPedido       Int             @id @default(autoincrement())
+  dataVenda      DateTime        @default(now())
+  valorBruto     Decimal         @db.Decimal(10, 2)
+  desconto       Decimal         @db.Decimal(10, 2)
   statusPedido   String
-  valorTotal     Decimal  @db.Decimal(10, 2)
-
+  valorTotal     Decimal         @db.Decimal(10, 2)
   clienteId      Int
   funcionarioId  Int
   lojaId         Int
   formaPagId     Int
-
-  cliente        cliente        @relation(fields: [clienteId], references: [idCliente])
-  funcionario    funcionario    @relation(fields: [funcionarioId], references: [idFuncionario])
-  loja           loja           @relation(fields: [lojaId], references: [idLoja])
-  formaPagamento formaPagamento @relation(fields: [formaPagId], references: [idFormaPag])
-
+  cliente        cliente         @relation(fields: [clienteId], references: [idCliente])
+  formaPagamento formaPagamento  @relation(fields: [formaPagId], references: [idFormaPag])
+  funcionario    funcionario     @relation(fields: [funcionarioId], references: [idFuncionario])
+  loja           loja            @relation(fields: [lojaId], references: [idLoja])
   pedidoProdutos pedidoProduto[]
 }
 
@@ -196,9 +166,8 @@ model pedidoProduto {
   pedidoId   Int
   produtoId  Int
   quantidade Int
-
-  pedido   pedido   @relation(fields: [pedidoId], references: [idPedido])
-  produto  produto  @relation(fields: [produtoId], references: [idProduto])
+  pedido     pedido  @relation(fields: [pedidoId], references: [idPedido])
+  produto    produto @relation(fields: [produtoId], references: [idProduto])
 
   @@id([pedidoId, produtoId])
 }
@@ -209,4 +178,11 @@ model historico {
   precoAntigo   Decimal  @db.Decimal(10, 2)
   precoNovo     Decimal  @db.Decimal(10, 2)
   dataAlteracao DateTime @default(now())
+}
+
+enum PrioridadeFornecedor {
+  PRIMARIA
+  SECUNDARIA
+  TERCIARIA
+  OUTRA
 }
