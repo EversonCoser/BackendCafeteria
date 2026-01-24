@@ -1,19 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 
 @Injectable()
 export class FornecedorService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: {
-    cnpjcpf: string;
-    nome: string;
-    endereco: string;
-    telefone: string;
-    tipoFornecimento: string;
-    prazoEntrega: number;
-    email: string;
-  }) {
+  async create(data: CreateFornecedorDto) {
     return this.prisma.fornecedor.create({
       data,
     });
@@ -37,15 +31,7 @@ export class FornecedorService {
 
   async update(
     idFornecedor: number,
-    data: {
-      cnpjcpf?: string;
-      nome?: string;
-      endereco?: string;
-      telefone?: string;
-      tipoFornecimento?: string;
-      prazoEntrega?: number;
-      email?: string;
-    },
+    data: UpdateFornecedorDto,
   ) {
     await this.findOne(idFornecedor);
 
