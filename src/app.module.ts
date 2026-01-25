@@ -6,9 +6,12 @@ import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { ProdutoModule } from './produto/produto.module';
 import { LojaModule } from './loja/loja.module';
 import { ProdutoLojaFornecedorModule } from './produto-loja-fornecedor/produto-loja-fornecedor.module';
+import { CargoModule } from './cargo/cargo.module';
+import { FormaPagamentoModule } from './forma-pagamento/forma-pagamento.module';
+import { PedidoModule } from './pedido/pedido.module';
 
 @Module({
-  imports: [PrismaModule, FornecedorModule, ProdutoModule, LojaModule, ProdutoLojaFornecedorModule],
+  imports: [PrismaModule, FornecedorModule, ProdutoModule, LojaModule, ProdutoLojaFornecedorModule, CargoModule, FormaPagamentoModule, PedidoModule],
   controllers: [AppController],
   providers: [AppService],
 })
