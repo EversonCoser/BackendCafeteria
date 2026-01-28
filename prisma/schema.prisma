@@ -134,6 +134,7 @@ model funcionario {
   idFuncionario   Int      @id
   percentComissao Decimal  @db.Decimal(5, 2)
   dataAdmissao    DateTime @default(now())
+  ativo           Boolean  @default(true)
   cargoId         Int
   lojaId          Int
   cargo           cargo    @relation(fields: [cargoId], references: [idCargo])
