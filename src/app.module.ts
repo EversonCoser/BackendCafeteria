@@ -11,9 +11,10 @@ import { FormaPagamentoModule } from './forma-pagamento/forma-pagamento.module';
 import { PedidoModule } from './pedido/pedido.module';
 import { PedidoProdutoModule } from './pedido-produto/pedido-produto.module';
 import { PessoaModule } from './pessoa/pessoa.module';
+import { ClienteModule } from './cliente/cliente.module';
 
 @Module({
-  imports: [PrismaModule, FornecedorModule, ProdutoModule, LojaModule, ProdutoLojaFornecedorModule, CargoModule, FormaPagamentoModule, PedidoModule, PedidoProdutoModule, PessoaModule],
+  imports: [PrismaModule, FornecedorModule, ProdutoModule, LojaModule, ProdutoLojaFornecedorModule, CargoModule, FormaPagamentoModule, PedidoModule, PedidoProdutoModule, PessoaModule, ClienteModule],
   controllers: [AppController],
   providers: [AppService],
 })
