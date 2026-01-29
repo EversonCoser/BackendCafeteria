@@ -17,6 +17,7 @@ import { PessoaModule } from './pessoa/pessoa.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { FuncionarioModule } from './funcionario/funcionario.module';
 import { AuthModule } from './auth/auth.module';
+import { HistoricoModule } from './historico/historico.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AuthModule } from './auth/auth.module';
     ClienteModule,
     FuncionarioModule,
     AuthModule,
+    HistoricoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
