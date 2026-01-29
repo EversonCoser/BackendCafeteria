@@ -9,7 +9,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/roles.enum';
 
-@Roles(Role.FUNCIONARIO, Role.CLIENTE, Role.ADMIN)
+@Roles(Role.FUNCIONARIO, Role.ADMIN)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('funcionario')
 export class FuncionarioController {
