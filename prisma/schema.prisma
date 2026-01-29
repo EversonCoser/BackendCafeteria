@@ -30,6 +30,7 @@ model produto {
   disponivel              Boolean                 @default(true)
   pedidoProdutos          pedidoProduto[]
   produtoLojaFornecedores produtoLojaFornecedor[]
+  historico               historico[]
   alimento                produtoalimento?
   bebida                  produtobebida?
   cafe                    produtocafe?
@@ -179,6 +180,8 @@ model historico {
   precoAntigo   Decimal  @db.Decimal(10, 2)
   precoNovo     Decimal  @db.Decimal(10, 2)
   dataAlteracao DateTime @default(now())
+
+  produto       produto  @relation(fields: [produtoId], references: [idProduto])
 }
 
 enum PrioridadeFornecedor {
