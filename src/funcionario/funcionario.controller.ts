@@ -1,8 +1,16 @@
-import { Controller, Post, Param, Body, ParseIntPipe, Get, Patch } from '@nestjs/common';
+import { Controller, Post, Param, Body, ParseIntPipe, Get, Patch, UseGuards } from '@nestjs/common';
 import { FuncionarioService } from './funcionario.service';
 import { CreateFuncionarioDto } from './dto/create-funcionario.dto';
 import { UpdateFuncionarioDto } from './dto/update-funcionario.dto';
 
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/roles.enum';
+
+@Roles(Role.FUNCIONARIO, Role.CLIENTE, Role.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('funcionario')
 export class FuncionarioController {
 

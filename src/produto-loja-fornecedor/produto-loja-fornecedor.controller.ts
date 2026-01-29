@@ -7,11 +7,19 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards
 } from '@nestjs/common';
 import { ProdutoLojaFornecedorService } from './produto-loja-fornecedor.service';
 import { CreateProdutoLojaFornecedorDto } from './dto/create-produto-loja-fornecedor.dto';
 import { UpdateProdutoLojaFornecedorDto } from './dto/update-produto-loja-fornecedor.dto';
 
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/roles.enum';
+
+@Roles(Role.FUNCIONARIO, Role.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('produto-loja-fornecedor')
 export class ProdutoLojaFornecedorController {
   constructor(

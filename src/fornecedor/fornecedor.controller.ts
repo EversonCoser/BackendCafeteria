@@ -7,11 +7,19 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  UseGuards
 } from '@nestjs/common'
 import { FornecedorService } from './fornecedor.service'
 import { CreateFornecedorDto } from './dto/create-fornecedor.dto'
 import { UpdateFornecedorDto } from './dto/update-fornecedor.dto'
 
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/roles.enum';
+
+@Roles(Role.FUNCIONARIO, Role.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('fornecedores')
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}

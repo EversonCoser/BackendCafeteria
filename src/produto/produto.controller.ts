@@ -6,6 +6,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  UseGuards
 } from '@nestjs/common';
 
 import { ProdutoService } from './produto.service';
@@ -17,6 +18,13 @@ import { CreateProdutoAlimentoDto } from './dto/create-produto-alimento.dto';
 import { CreateProdutoBebidaDto } from './dto/create-produto-bebida.dto';
 import { CreateProdutoCafeDto } from './dto/create-produto-cafe.dto';
 
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/roles.enum';
+
+@Roles(Role.FUNCIONARIO, Role.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('produtos')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}

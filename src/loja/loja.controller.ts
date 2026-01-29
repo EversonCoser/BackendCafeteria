@@ -5,13 +5,20 @@ import {
   Body,
   Param,
   Patch,
-  Delete,
   ParseIntPipe,
+  UseGuards
 } from '@nestjs/common'
 import { LojaService } from './loja.service'
 import { CreateLojaDto } from './dto/create-loja.dto'
 import { UpdateLojaDto } from './dto/update-loja.dto'
 
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../auth/roles.enum';
+
+@Roles(Role.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('loja')
 export class LojaController {
     constructor(private readonly lojaService: LojaService) {}
